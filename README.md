@@ -1,2 +1,2 @@
-# gohelpers
-A helper library for Go.
+# goutils
+A library of helpful utilities for Go.
