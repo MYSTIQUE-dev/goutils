@@ -1,0 +1,52 @@
+TEXT ·bv16_Add(SB), $0-24
+	MOVQ a+0(FP), AX
+	MOVQ b+8(FP), BX
+	MOVQ result+16(FP), CX
+	MOVO 0(AX), X0
+	MOVO 0(BX), X1
+	PADDUSB X1, X0
+	MOVO X0, 0(CX)
+	RET
+
+TEXT ·bv16_Sub(SB), $0-24
+	MOVQ a+0(FP), AX
+	MOVQ b+8(FP), BX
+	MOVQ result+16(FP), CX
+	MOVO 0(AX), X0
+	MOVO 0(BX), X1
+	PSUBUSB X1, X0
+	MOVO X0, 0(CX)
+	RET
+
+TEXT ·bv16_Min(SB), $0-24
+	MOVQ a+0(FP), AX
+	MOVQ b+8(FP), BX
+	MOVQ result+16(FP), CX
+	MOVO 0(AX), X0
+	MOVO 0(BX), X1
+	PMINUB X1, X0
+	MOVO X0, 0(CX)
+	RET
+
+TEXT ·bv16_Max(SB), $0-24
+	MOVQ a+0(FP), AX
+	MOVQ b+8(FP), BX
+	MOVQ result+16(FP), CX
+	MOVO 0(AX), X0
+	MOVO 0(BX), X1
+	PMAXUB X1, X0
+	MOVO X0, 0(CX)
+	RET
+
+TEXT ·bv16_Clamp(SB), $0-32
+	MOVQ v+0(FP), AX
+	MOVQ mn+8(FP), BX
+	MOVQ mx+16(FP), CX
+	MOVQ result+24(FP), DX
+	MOVO 0(AX), X0
+	MOVO 0(BX), X1
+	MOVO 0(CX), X2
+	PMAXUB X1, X0
+	PMINUB X2, X0
+	MOVO X0, 0(DX)
+	RET
