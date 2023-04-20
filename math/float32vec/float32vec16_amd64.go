@@ -42,8 +42,8 @@ func (a *Float32Vec16) Mul(b *Float32Vec16, result *Float32Vec16) {
 	}
 }
 
-func f32v16_fmaFMA_AVX512F(a *Float32Vec16, b *Float32Vec16, c *Float32Vec16, result *Float32Vec16)
-func f32v16_fmaFMA_AVX(a *Float32Vec16, b *Float32Vec16, c *Float32Vec16, result *Float32Vec16)
+func f32v16_fmaAVX512F(a *Float32Vec16, b *Float32Vec16, c *Float32Vec16, result *Float32Vec16)
+func f32v16_fmaAVX(a *Float32Vec16, b *Float32Vec16, c *Float32Vec16, result *Float32Vec16)
 func f32v16_fmaGeneric(a *Float32Vec16, b *Float32Vec16, c *Float32Vec16, result *Float32Vec16) {
 	v1 := *a
 	v2 := *b
@@ -69,10 +69,10 @@ func f32v16_fmaGeneric(a *Float32Vec16, b *Float32Vec16, c *Float32Vec16, result
 	*result = v1
 }
 func (a *Float32Vec16) FMA(b *Float32Vec16, c *Float32Vec16, result *Float32Vec16) {
-	if cpu.X86.HasFMA {
-		f32v16_fmaFMA(a, b, c, result)
-	} else {
-		f32v16_fmaGeneric(a, b, c, result)
+	switch {
+	case cpu.X86.HasAVX512F: f32v16_fmaAVX512F(a, b, c, result)
+	case cpu.X86.HasAVX: f32v16_fmaAVX(a, b, c, result)
+	default: f32v16_fmaGeneric(a, b, c, result)
 	}
 }
 
@@ -114,9 +114,9 @@ func f32v16_clampAVX(v *Float32Vec16, mn *Float32Vec16, mx *Float32Vec16, result
 func f32v16_clampSSE2(v *Float32Vec16, mn *Float32Vec16, mx *Float32Vec16, result *Float32Vec16)
 func (v *Float32Vec16) Clamp(mn *Float32Vec16, mx *Float32Vec16, result *Float32Vec16) {
 	switch {
-	case cpu.X86.HasAVX512F: f32v16_maxAVX512F(v, mn, mx, result)
-	case cpu.X86.HasAVX: f32v16_maxAVX(v, mn, mx, result)
-	default: f32v16_maxSSE2(v, mn, mx, result)
+	case cpu.X86.HasAVX512F: f32v16_clampAVX512F(v, mn, mx, result)
+	case cpu.X86.HasAVX: f32v16_clampAVX(v, mn, mx, result)
+	default: f32v16_clampSSE2(v, mn, mx, result)
 	}
 }
 

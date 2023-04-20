@@ -128,7 +128,7 @@ func (v *ByteVec16) Min(mn *ByteVec16, result *ByteVec16) {
 
 func (v *ByteVec16) Max(mx *ByteVec16, result *ByteVec16) {
 	v1 := *v
-	v2 := *mn
+	v2 := *mx
 
 	v1[0] = math.Max(v1[0], v2[0])
 	v1[1] = math.Max(v1[1], v2[1])
